@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TechNova Admin Panel</title><link rel="stylesheet" href="/admin.css">
+</head>
+<body>
+<div id="loginView" class="login-wrap">
+  <div class="login-card"><a href="/"><img src="/assets/technova-logo.png" alt="TechNova"></a><p class="eyebrow">SECURE ADMIN</p><h1>TechNova Admin Panel</h1><p>Manage products, images, stock and enquiries.</p>
+  <form id="loginForm"><input id="email" type="email" value="" placeholder="Admin email" required><input id="password" type="password" placeholder="Admin password" required><button class="btn primary">Log in</button><p id="loginMsg" class="message"></p></form>
+  <p class="hint">Set ADMIN_EMAIL and ADMIN_PASSWORD in your deployment environment before going live.</p></div>
+</div>
+
+<div id="appView" class="hidden">
+<header class="admin-head"><div><b>TECHNOVA</b><span>ADMIN PANEL</span></div><div><a href="/" target="_blank">View store</a><button id="logout" class="btn ghost">Log out</button></div></header>
+<main class="admin-main">
+<section class="dashboard">
+<div class="dash-card"><span>Products</span><b id="productCount">0</b></div><div class="dash-card"><span>In stock</span><b id="stockCount">0</b></div><div class="dash-card"><span>Enquiries</span><b id="enquiryCount">0</b></div>
+</section>
+<section class="panel">
+<div class="panel-head"><div><p class="eyebrow">CATALOG</p><h2>Products</h2></div><button id="newProduct" class="btn primary">+ Add product</button></div>
+<div class="table-wrap"><table><thead><tr><th>Image</th><th>Product</th><th>Brand</th><th>Category</th><th>Price</th><th>Stock</th><th>Actions</th></tr></thead><tbody id="productRows"></tbody></table></div>
+</section>
+<section class="panel">
+<div class="panel-head"><div><p class="eyebrow">CUSTOMER CONTACT</p><h2>Enquiries</h2></div></div>
+<div id="enquiries"></div>
+</section>
+</main>
+</div>
+
+<div id="modal" class="modal hidden"><div class="modal-card"><div class="modal-head"><h2 id="modalTitle">Add product</h2><button id="closeModal">×</button></div>
+<form id="productForm" enctype="multipart/form-data">
+<input type="hidden" id="productId">
+<label>Product name<input id="pName" name="name" required></label>
+<div class="two"><label>Brand<input id="pBrand" name="brand" placeholder="e.g. Third-Party Brand"></label><label>Category<select id="pCategory" name="category"><option>Everyday</option><option>Home</option><option>Fashion</option><option>Earbuds & Audio</option></select></label></div>
+<div class="two"><label>Price (₹)<input id="pPrice" name="price" type="number" min="0" step="0.01" required></label><label>Stock<input id="pStock" name="stock" type="number" min="0" required></label></div>
+<label>Description<textarea id="pDescription" name="description"></textarea></label>
+<label>Product image<input id="pImage" name="image" type="file" accept="image/png,image/jpeg,image/webp,image/gif"><small>Max 5 MB. JPG, PNG, WEBP or GIF.</small></label>
+<label class="check"><input id="pFeatured" name="featured" value="1" type="checkbox"> Featured product</label>
+<button class="btn primary">Save product</button><p id="formMsg" class="message"></p>
+</form></div></div>
+<script src="/admin.js"></script>
+</body></html>

@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="TechNova provides technology solutions and a curated online marketplace.">
+<title>TechNova | Your Future, Powered by Tech</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="topbar">SMARTER SOLUTIONS. BETTER EVERYDAY PRODUCTS. • PROFESSIONAL SUPPORT</div>
+<header class="header">
+  <a class="brand" href="/"><img src="/assets/technova-logo.png" alt="TechNova"></a>
+  <nav><a href="#solutions">Solutions</a><a href="#store">Store</a><a href="#about">About</a><a href="#contact">Contact</a><a class="admin-link" href="/admin">Admin</a></nav>
+  <button id="cartBtn" class="cart-btn">Cart <span id="cartCount">0</span></button>
+</header>
+
+<main>
+<section class="hero">
+  <div class="hero-copy">
+    <p class="eyebrow">TECHNOLOGY • SOLUTIONS • MARKETPLACE</p>
+    <h1>Technology that <span>works for you.</span></h1>
+    <p>Professional technology services, practical digital solutions, and a curated marketplace for everyday products.</p>
+    <div class="hero-actions"><a class="btn primary" href="#solutions">Explore solutions</a><a class="btn ghost" href="#store">Shop products</a></div>
+  </div>
+  <div class="hero-art"><img src="/assets/hero-banner.png" alt="TechNova technology"></div>
+</section>
+
+<section class="stats">
+  <div><b>01</b><span>Technology solutions</span></div>
+  <div><b>02</b><span>Curated marketplace</span></div>
+  <div><b>03</b><span>Third-party brands</span></div>
+  <div><b>04</b><span>Customer-first support</span></div>
+</section>
+
+<section id="solutions" class="section">
+  <div class="section-head"><div><p class="eyebrow">WHAT WE DO</p><h2>Technology solutions</h2></div><p>From websites to technical support, TechNova helps turn ideas and problems into practical digital outcomes.</p></div>
+  <div class="solution-grid">
+    <article><div class="icon">01</div><h3>Website Development</h3><p>Modern, responsive websites for businesses, brands and projects.</p></article>
+    <article><div class="icon">02</div><h3>Digital Solutions</h3><p>Useful software and digital workflows designed around your needs.</p></article>
+    <article><div class="icon">03</div><h3>IT & Technical Support</h3><p>Reliable technical assistance for everyday technology challenges.</p></article>
+    <article><div class="icon">04</div><h3>Custom Solutions</h3><p>Flexible technology work for requirements that do not fit a template.</p></article>
+  </div>
+</section>
+
+<section id="store" class="section store-section">
+  <div class="section-head"><div><p class="eyebrow">TECHNOVA MARKETPLACE</p><h2>Shop products</h2></div><p>Products can be managed from the TechNova Admin Panel. Earbuds and audio products may come from third-party brands.</p></div>
+  <div class="store-tools"><input id="search" placeholder="Search products..."><select id="category"><option value="">All categories</option><option>Everyday</option><option>Home</option><option>Fashion</option><option>Earbuds & Audio</option></select></div>
+  <div id="products" class="product-grid"></div>
+</section>
+
+<section class="feature-band">
+  <div><p class="eyebrow">AUDIO MARKETPLACE</p><h2>Third-party audio brands, clearly presented.</h2><p>TechNova can sell earbuds and audio products made by other brands. Product brand information is displayed separately so customers know what they are buying.</p></div>
+  <a class="btn primary" href="#store">Browse audio</a>
+</section>
+
+<section id="about" class="section">
+  <div class="section-head"><div><p class="eyebrow">ABOUT TECHNOVA</p><h2>A technology company with a practical store.</h2></div><p>Build useful digital experiences, solve technical problems, and shop selected products from one professional platform.</p></div>
+  <div class="about-grid"><div><h3>Clear</h3><p>Simple information, transparent product details and straightforward communication.</p></div><div><h3>Flexible</h3><p>Services can be tailored to your project, business or technical requirement.</p></div><div><h3>Professional</h3><p>A modern customer experience built for trust and long-term growth.</p></div></div>
+</section>
+
+<section id="contact" class="section contact-section">
+  <div><p class="eyebrow">CONTACT TECHNOVA</p><h2>Tell us what you need.</h2><p>Send an enquiry for a website, digital solution, IT support, custom project or product question.</p></div>
+  <form id="contactForm" class="contact-form">
+    <input name="name" required placeholder="Your name"><input name="email" type="email" required placeholder="Email address"><input name="phone" placeholder="Phone number">
+    <select name="type"><option>Website development</option><option>Digital solution</option><option>IT support</option><option>Custom solution</option><option>Product enquiry</option></select>
+    <textarea name="message" required placeholder="How can we help?"></textarea><button class="btn primary">Send enquiry</button><p id="contactMsg" class="message"></p>
+  </form>
+</section>
+</main>
+
+<footer><div><strong>TECHNOVA</strong><p>Your Future, Powered by Tech</p></div><div><a href="#solutions">Solutions</a><a href="#store">Store</a><a href="#contact">Contact</a><a href="/admin">Admin</a></div></footer>
+
+<aside id="cart" class="cart"><div class="cart-head"><h2>Your cart</h2><button id="closeCart">×</button></div><div id="cartItems"></div><div class="cart-total"><span>Total</span><b id="cartTotal">₹0</b></div><button id="checkout" class="btn primary full">Checkout</button><p class="small">Payment gateway can be connected to a secure backend before accepting live payments.</p></aside>
+<div id="overlay" class="overlay"></div>
+<script src="/script.js"></script>
+</body></html>
