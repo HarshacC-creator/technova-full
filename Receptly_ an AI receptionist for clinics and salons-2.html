@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Receptly: an AI receptionist for clinics and salons</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F1F6F6;--surface:#FFFFFF;--ink:#10252B;--muted:#4B6168;--line:#D3E0E2;
+  --brand:#0F766E;--brand-ink:#FFFFFF;--tint:#DDF1EE;--warn:#B45309;--warn-tint:#FDEBD0;
+  --head:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--bg:#0C1A1E;--surface:#13262B;--ink:#E7F2F2;--muted:#9DB5BA;--line:#25414A;--brand:#2DD4BF;--brand-ink:#06201C;--tint:#12363A;--warn:#F5B160;--warn-tint:#3A2A12;color-scheme:dark}
+}
+:root[data-theme="dark"]{--bg:#0C1A1E;--surface:#13262B;--ink:#E7F2F2;--muted:#9DB5BA;--line:#25414A;--brand:#2DD4BF;--brand-ink:#06201C;--tint:#12363A;--warn:#F5B160;--warn-tint:#3A2A12;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1.0625rem/1.6 var(--body)}
+h1,h2,h3{font-family:var(--head);line-height:1.1;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(2.2rem,5.5vw,3.6rem)}
+h2{font-size:clamp(1.7rem,3.5vw,2.4rem);margin-bottom:.6rem}
+h3{font-size:1.2rem;margin-bottom:.3rem}
+p{margin:0 0 1rem}
+a{color:var(--brand)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 1.25rem}
+section{padding:4rem 0}
+.sub{color:var(--muted);max-width:60ch}
+:focus-visible{outline:3px solid var(--brand);outline-offset:3px;border-radius:6px}
+.btn{display:inline-block;background:var(--brand);color:var(--brand-ink);font:600 1rem var(--body);padding:.85rem 1.4rem;border-radius:10px;border:0;text-decoration:none;cursor:pointer}
+.btn.alt{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;padding-top:1.1rem;padding-bottom:1.1rem;gap:1rem}
+.logo{font:700 1.35rem var(--head);color:var(--ink);text-decoration:none;display:flex;align-items:center;gap:.5rem}
+.logo i{width:12px;height:12px;border-radius:50%;background:var(--brand);display:inline-block}
+nav{display:flex;gap:1.4rem;align-items:center}
+nav a{color:var(--muted);text-decoration:none;font-weight:500}
+@media (max-width:720px){nav a.l{display:none}}
+.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:3rem;align-items:center;padding:3rem 0 4.5rem}
+@media (max-width:860px){.hero{grid-template-columns:1fr;gap:2rem}}
+.hero p.sub{font-size:1.15rem;margin:1.1rem 0 1.6rem}
+.cta{display:flex;gap:.75rem;flex-wrap:wrap}
+.call{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:1.1rem;box-shadow:0 10px 30px -18px rgba(16,37,43,.45)}
+.call-top{display:flex;justify-content:space-between;align-items:center;font-size:.9rem;color:var(--muted);padding-bottom:.8rem;border-bottom:1px solid var(--line);margin-bottom:.9rem;gap:.5rem;flex-wrap:wrap}
+.missed{background:var(--warn-tint);color:var(--warn);padding:.15rem .6rem;border-radius:99px;font-weight:600;font-size:.82rem}
+.msg{max-width:88%;padding:.6rem .9rem;border-radius:14px;margin:0 0 .6rem;font-size:.98rem;line-height:1.45}
+.msg small{display:block;font-size:.78rem;color:var(--muted);margin-bottom:.1rem}
+.them{background:var(--bg);border-top-left-radius:4px}
+.us{background:var(--tint);margin-left:auto;border-top-right-radius:4px}
+.booked{display:flex;justify-content:space-between;gap:.5rem;flex-wrap:wrap;margin-top:.9rem;padding:.75rem .9rem;border:1.5px dashed var(--brand);border-radius:12px;font-weight:600}
+.booked span:last-child{color:var(--brand)}
+.js .msg,.js .booked{opacity:0;transform:translateY(6px)}
+.js .msg.on,.js .booked.on{opacity:1;transform:none;transition:opacity .4s,transform .4s}
+@media (prefers-reduced-motion:reduce){.js .msg,.js .booked{opacity:1;transform:none}.js .msg.on,.js .booked.on{transition:none}html{scroll-behavior:auto}}
+.band{background:var(--surface);border-block:1px solid var(--line)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem}
+.stats p{margin:0;color:var(--muted)}
+.stats b{display:block;color:var(--ink);font:700 1.15rem var(--head);margin-bottom:.15rem}
+.steps{list-style:none;padding:0;margin:2rem 0 0;display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;counter-reset:s}
+@media (max-width:760px){.steps{grid-template-columns:1fr}}
+.steps li{counter-increment:s;border-top:3px solid var(--brand);padding-top:1rem}
+.steps li::before{content:"Step " counter(s);display:block;color:var(--brand);font-weight:600;font-size:.9rem;margin-bottom:.3rem}
+.feat{display:grid;grid-template-columns:1fr 1fr;gap:0 3rem;margin-top:1.5rem}
+@media (max-width:760px){.feat{grid-template-columns:1fr}}
+.feat div{padding:1rem 0;border-bottom:1px solid var(--line)}
+.feat p{margin:0;color:var(--muted)}
+.plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.25rem;margin-top:2rem}
+.plan{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:1.5rem;display:flex;flex-direction:column}
+.plan.pick{border:2px solid var(--brand)}
+.price{font:700 2rem var(--head);margin:.3rem 0 .8rem}
+.price small{font:400 .95rem var(--body);color:var(--muted)}
+.plan ul{padding-left:1.1rem;margin:0 0 1.2rem;color:var(--muted)}
+.plan .btn{margin-top:auto;text-align:center}
+.note{font-size:.92rem;color:var(--muted)}
+details{border-bottom:1px solid var(--line);padding:1rem 0}
+summary{cursor:pointer;font-weight:600}
+details p{margin:.6rem 0 0;color:var(--muted)}
+form{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:1.5rem;display:grid;gap:1rem;max-width:560px}
+label{display:grid;gap:.3rem;font-weight:500;font-size:.95rem}
+input,select{font:inherit;padding:.7rem .8rem;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink)}
+.ok{color:var(--brand);font-weight:600;margin:0}
+footer{padding:2rem 0 3rem;color:var(--muted);font-size:.92rem;border-top:1px solid var(--line)}
+.try{display:grid;gap:.3rem;font-size:.9rem;margin-bottom:.9rem;font-weight:500}
+.co{display:grid;grid-template-columns:1.2fr .8fr;gap:2rem;align-items:start;margin-top:1.5rem}
+@media (max-width:860px){.co{grid-template-columns:1fr}}
+#cf{max-width:none}
+.cart{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:1.5rem}
+.row{display:flex;justify-content:space-between;gap:1rem;padding:.5rem 0}
+.row.t{border-top:1px solid var(--line);font-weight:700;margin-top:.5rem;padding-top:.8rem}
+.rm{background:none;border:0;color:var(--brand);cursor:pointer;font:inherit;padding:0;text-decoration:underline}
+.greet{background:var(--tint);padding:.7rem .9rem;border-radius:10px;margin:0;font-size:.95rem}
+fieldset{border:1.5px solid var(--line);border-radius:10px;padding:.8rem 1rem;margin:0}
+legend{font-weight:500;padding:0 .3rem}
+fieldset label{display:flex;gap:.6rem;align-items:center;font-weight:400;padding:.25rem 0}
+fieldset input{width:auto}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <a class="logo" href="#top"><i></i>Receptly</a>
+  <nav><a class="l" href="#how">How it works</a><a class="l" href="#pricing">Pricing</a><a class="l" href="#faq">FAQ</a><a class="l" href="#demo">Book a demo</a><a class="btn" href="#checkout">Buy now</a></nav>
+</div></header>
+
+<main id="top">
+<div class="wrap hero">
+  <div>
+    <h1>Never lose a patient to a missed call</h1>
+    <p class="sub">Receptly answers your clinic or salon phone around the clock, speaks your customers’ language, and books the appointment while you work.</p>
+    <div class="cta"><a class="btn" href="#demo">Book a free demo</a><a class="btn alt" href="#how">See how it works</a></div>
+  </div>
+  <div class="call" aria-label="Example call handled by Receptly">
+    <label class="try">Try it with your clinic’s name<input id="hc" placeholder="Smile Dental Clinic" autocomplete="off" maxlength="60"></label>
+    <div class="call-top"><span><b id="cn">Smile Dental Clinic</b> · 7:42 PM · in Hindi</span><span class="missed">Clinic closed</span></div>
+    <p class="msg us"><small>Receptly</small><span id="gr">Hello, this is Smile Dental Clinic. How can I help you today?</span></p>
+    <p class="msg them"><small>Caller</small>Can I get an appointment tomorrow for a toothache?</p>
+    <p class="msg us"><small>Receptly</small>Yes. Dr. Meera is free at 11 AM or 4 PM tomorrow. Which works for you?</p>
+    <p class="msg them"><small>Caller</small>4 PM, please.</p>
+    <p class="msg us"><small>Receptly</small>Booked. I’ve sent a confirmation to your phone.</p>
+    <div class="booked"><span>Appointment booked</span><span>Tomorrow, 4:00 PM</span></div>
+  </div>
+</div>
+
+<div class="band"><div class="wrap"><section style="padding:2.5rem 0">
+  <div class="stats">
+    <p><b>Answers every call</b>Lunch breaks, busy hours, and after closing time.</p>
+    <p><b>Fewer no-shows</b>Automatic reminders let patients confirm or reschedule.</p>
+    <p><b>Works in your language</b>Hindi, Kannada, Tamil, Telugu, and English.</p>
+  </div>
+</section></div></div>
+
+<section id="how"><div class="wrap">
+  <h2>Set up in a day, no new software to learn</h2>
+  <p class="sub">You keep your phone number and your calendar. Receptly handles the calls.</p>
+  <ol class="steps">
+    <li><h3>Tell us about your clinic</h3><p>Share your doctors, timings, services, and fees. We set Receptly up for you.</p></li>
+    <li><h3>Connect your calendar</h3><p>Receptly sees open slots and adds bookings to Google Calendar or your booking tool.</p></li>
+    <li><h3>Calls get answered</h3><p>Patients book, reschedule, and ask questions. You see every call in your dashboard.</p></li>
+  </ol>
+</div></section>
+
+<section class="band" style="border-block:1px solid var(--line)"><div class="wrap">
+  <h2>What Receptly does for your front desk</h2>
+  <div class="feat">
+    <div><h3>Books and reschedules</h3><p>Checks your calendar live and never double-books a slot.</p></div>
+    <div><h3>Answers common questions</h3><p>Timings, fees, location, and which services you offer.</p></div>
+    <div><h3>Sends reminders</h3><p>SMS or WhatsApp reminders before each visit, with a one-tap reschedule.</p></div>
+    <div><h3>Hands off to your team</h3><p>Emergencies and complaints go to a person, or are saved as a callback request.</p></div>
+    <div><h3>Shows you everything</h3><p>A simple dashboard lists calls, bookings, and requests it couldn’t handle.</p></div>
+    <div><h3>Keeps data private</h3><p>Patient details are stored securely and used only for your clinic.</p></div>
+  </div>
+</div></section>
+
+<section id="pricing"><div class="wrap">
+  <h2>Pricing that pays for itself</h2>
+  <p class="sub">If Receptly books just a few extra appointments a month, it covers its own cost. Free 2-week pilot for early clinics.</p>
+  <div class="plans">
+    <div class="plan"><h3>Starter</h3><div class="price">₹2,999<small> / month</small></div><ul><li>Up to 300 calls a month</li><li>Booking and FAQs</li><li>Email support</li></ul><button class="btn alt" data-plan="starter">Add to cart</button></div>
+    <div class="plan pick"><h3>Growth</h3><div class="price">₹4,499<small> / month</small></div><ul><li>Up to 500 calls a month</li><li>Reminders by SMS and WhatsApp</li><li>Calendar and dashboard</li><li>Priority support</li></ul><button class="btn" data-plan="growth">Add to cart</button></div>
+    <div class="plan"><h3>Multi-branch</h3><div class="price">Custom</div><ul><li>Several locations</li><li>Custom workflows</li><li>Dedicated setup help</li></ul><a class="btn alt" href="#demo">Talk to us</a></div>
+  </div>
+  <p class="note" style="margin-top:1rem">Prices are introductory and exclude taxes.</p>
+</div></section>
+
+<section id="faq" class="band" style="border-block:1px solid var(--line)"><div class="wrap">
+  <h2>Questions clinic owners ask</h2>
+  <details><summary>Will patients know they’re talking to an AI?</summary><p>Receptly introduces itself clearly, speaks naturally, and passes the call to your team when someone asks for a person.</p></details>
+  <details><summary>Do I need to change my phone number?</summary><p>No. You can forward your existing number to Receptly, so patients keep calling the same one.</p></details>
+  <details><summary>What if it can’t answer something?</summary><p>It takes a message or transfers the call, and the request appears in your dashboard so nothing is lost.</p></details>
+  <details><summary>Which calendars does it work with?</summary><p>Google Calendar to start. If you use another booking tool, ask us during the demo.</p></details>
+  <details><summary>Can I cancel anytime?</summary><p>Yes. Plans are monthly with no long contract.</p></details>
+</div></section>
+
+<section id="checkout" class="band" style="border-block:1px solid var(--line)"><div class="wrap">
+  <h2>Get Receptly for your clinic</h2>
+  <p class="sub">Enter your clinic’s name and Receptly will greet every caller with it.</p>
+  <div class="co">
+    <form id="cf">
+      <label>Clinic or salon name<input id="cc" name="clinic" required maxlength="60" placeholder="e.g. Smile Dental Clinic" autocomplete="organization"></label>
+      <p class="greet" id="g2"></p>
+      <label>Owner name<input name="owner" required autocomplete="name"></label>
+      <label>Phone number<input name="phone" type="tel" required autocomplete="tel"></label>
+      <label>Email<input name="email" type="email" required autocomplete="email"></label>
+      <fieldset><legend>Payment method</legend>
+        <label><input type="radio" name="pm" value="UPI" checked> UPI</label>
+        <label><input type="radio" name="pm" value="Card"> Debit or credit card</label>
+        <label><input type="radio" name="pm" value="Net banking"> Net banking</label>
+      </fieldset>
+      <p class="note">Don’t enter card details here. After you place the order, we send a secure payment link for the method you chose.</p>
+      <button class="btn" type="submit">Place order</button>
+      <p class="ok" id="cm" role="status" hidden></p>
+    </form>
+    <aside class="cart" aria-label="Cart">
+      <h3>Your cart</h3>
+      <div id="items"></div>
+    </aside>
+  </div>
+</div></section>
+
+<section id="demo"><div class="wrap">
+  <h2>See Receptly answer a call for your clinic</h2>
+  <p class="sub" style="margin-bottom:1.5rem">Tell us a little about your practice and we’ll set up a short demo.</p>
+  <form id="f">
+    <label>Your name<input name="name" required autocomplete="name"></label>
+    <label>Clinic or salon name<input name="biz" required></label>
+    <label>Phone number<input name="phone" type="tel" required autocomplete="tel"></label>
+    <label>Type of business<select name="type"><option>Dental clinic</option><option>General clinic</option><option>Salon or spa</option><option>Other</option></select></label>
+    <button class="btn" type="submit">Request a demo</button>
+    <p class="ok" id="ok" hidden>Your email app should open with your request. Send it and we’ll be in touch.</p>
+  </form>
+</div></section>
+</main>
+
+<footer><div class="wrap">© 2026 Receptly. AI receptionist for clinics and salons.</div></footer>
+
+<script>
+document.documentElement.classList.add("js");
+var PLANS = {starter:{n:"Starter",p:2999}, growth:{n:"Growth",p:4499}}, cart = null;
+function $(i){return document.getElementById(i);}
+function money(n){return "₹"+n.toLocaleString("en-IN");}
+function setName(v){
+  var n = v.trim() || "Smile Dental Clinic";
+  $("cn").textContent = n;
+  $("gr").textContent = "Hello, this is "+n+". How can I help you today?";
+  $("g2").textContent = "Callers will hear: “Hello, this is "+n+". How can I help you today?”";
+}
+["hc","cc"].forEach(function(id){
+  $(id).addEventListener("input", function(e){
+    $(id==="hc"?"cc":"hc").value = e.target.value; setName(e.target.value);
+  });
+});
+setName("");
+function render(){
+  var el = $("items");
+  if(!cart){ el.innerHTML = '<p class="note">Your cart is empty. <a href="#pricing">Choose a plan</a> to continue.</p>'; return; }
+  var p = PLANS[cart], gst = Math.round(p.p*0.18);
+  el.innerHTML = '<div class="row"><span>'+p.n+' plan, monthly<br><button class="rm" type="button">Remove</button></span><span>'+money(p.p)+'</span></div>'
+    + '<div class="row"><span>GST (18%)</span><span>'+money(gst)+'</span></div>'
+    + '<div class="row t"><span>Total per month</span><span>'+money(p.p+gst)+'</span></div>';
+}
+render();
+document.querySelectorAll("[data-plan]").forEach(function(b){
+  b.addEventListener("click", function(){ cart = b.getAttribute("data-plan"); render(); $("checkout").scrollIntoView(); });
+});
+$("items").addEventListener("click", function(e){ if(e.target.className==="rm"){ cart = null; render(); } });
+$("cf").addEventListener("submit", function(e){
+  e.preventDefault();
+  var m = $("cm"); m.hidden = false;
+  if(!cart){ m.textContent = "Your cart is empty. Choose a plan in Pricing first."; return; }
+  var d = new FormData(e.target), p = PLANS[cart];
+  var body = "Clinic: "+d.get("clinic")+"\nOwner: "+d.get("owner")+"\nPhone: "+d.get("phone")+"\nEmail: "+d.get("email")+"\nPlan: "+p.n+" ("+money(p.p)+"/month + GST)\nPayment method: "+d.get("pm");
+  window.location.href = "mailto:"+CONTACT_EMAIL+"?subject="+encodeURIComponent("Receptly order: "+d.get("clinic"))+"&body="+encodeURIComponent(body);
+  m.textContent = "Your email app should open with your order. Send it and we’ll reply with a secure payment link.";
+});
+// Replace with your real email address before sharing the site
+var CONTACT_EMAIL = "hello@yourdomain.com";
+document.getElementById("f").addEventListener("submit", function(e){
+  e.preventDefault();
+  var d = new FormData(e.target);
+  var body = "Name: "+d.get("name")+"\nBusiness: "+d.get("biz")+"\nPhone: "+d.get("phone")+"\nType: "+d.get("type");
+  window.location.href = "mailto:"+CONTACT_EMAIL+"?subject="+encodeURIComponent("Receptly demo request")+"&body="+encodeURIComponent(body);
+  document.getElementById("ok").hidden = false;
+});
+(function(){
+  var els = document.querySelectorAll(".call .msg, .call .booked"), i = 0;
+  var slow = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function next(){ if(i<els.length){ els[i++].classList.add("on"); setTimeout(next, slow?900:0); } }
+  setTimeout(next, slow?400:0);
+})();
+</script>
+</body>
+</html>
